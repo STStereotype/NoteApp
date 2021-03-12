@@ -25,6 +25,9 @@ namespace NoteApp
     /// </summary>
     public class Note
     {
+
+        #region Поля 
+
         /// <summary>
         /// Категория заметки.
         /// </summary>
@@ -32,7 +35,7 @@ namespace NoteApp
         /// <summary>
         /// Название заметки.
         /// </summary>
-        private string _name = "Без названия";
+        private string _name = "";
         /// <summary>
         /// Текст заметки.
         /// </summary>
@@ -40,12 +43,27 @@ namespace NoteApp
         /// <summary>
         /// Дата и время создания заметки
         /// </summary>
-        private DateTime _dateCreation = DateTime.MinValue;
+        private DateTime _dateCreation;
         /// <summary>
         /// Дата и время последнего редактирования
         /// </summary>
-        private DateTime _timeLastEdit = DateTime.MinValue;
+        private DateTime _timeLastEdit;
 
+        #endregion
+
+        #region Конструкторы класса
+
+        /// <summary>
+        /// Конструктор класса Note.
+        /// </summary>
+        public Note()
+        {
+            _timeLastEdit = _dateCreation = DateTime.Now;
+        }
+
+        #endregion
+
+        #region Свойства 
 
         /// <summary>
         /// Свойство категории заметки.
@@ -139,17 +157,6 @@ namespace NoteApp
         public DateTime DateCreation
         {
             get { return _dateCreation; }
-            set
-            {
-                if (_dateCreation != DateTime.MinValue)
-                {
-                    throw new ArgumentException("Невозможно изменить дату создания заметки");
-                }
-                else
-                {
-                    _dateCreation = value;
-                }
-            }
         }
 
         /// <summary>
@@ -160,5 +167,8 @@ namespace NoteApp
             get { return _timeLastEdit; }
             set { _timeLastEdit = DateTime.Now; }
         }
+
+        #endregion
+
     }
 }
