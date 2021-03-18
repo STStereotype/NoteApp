@@ -7,44 +7,31 @@ using System.Threading.Tasks;
 
 namespace NoteApp
 {
-    class Project
+    /// <summary>
+    /// Класс хранящий данные о заметках
+    /// </summary>
+    public class Project
     {
-
         #region Поля
 
         /// <summary>
         /// Список заметок.
         /// </summary>
-        private List<Note> _note;
+        private List<Note> _notes;
 
         #endregion
 
-        #region Методы
 
         /// <summary>
-        /// Метод добавления заметки.
+        /// Своство заметок.
         /// </summary>
-        /// <param name="category">Категория заметки.</param>
-        /// <param name="nameNote">Название заметки.</param>
-        /// <param name="textNote">Текст заметки.</param>
-        public void AddNote(category category, string nameNote, string textNote)
+        public List<Note> Notes
         {
-            var tempNote = new Note();
-            tempNote.Category = category;
-            tempNote.Name = nameNote;
-            tempNote.TextNote = textNote;
-            _note.Add(tempNote);
+            get { return _notes; }
+            set
+            {
+                _notes = value;
+            }
         }
-
-        /// <summary>
-        /// Метод удаления заметки.
-        /// </summary>
-        public void RemoveNote()
-        {
-            _note.RemoveAt(0);
-        }
-
-        #endregion
-
     }
 }

@@ -7,23 +7,9 @@ using System.Threading.Tasks;
 namespace NoteApp
 {
     /// <summary>
-    /// Тип данных перечисления категорий заметок.
-    /// </summary>
-    public enum category
-    {
-        Work,
-        Home,
-        HealthAndSports,
-        People,
-        Documents,
-        Finance,
-        Different
-    };
-
-    /// <summary>
     /// Класс заметок.
     /// </summary>
-    public class Note
+    public class Note : ICloneable
     {
 
         #region Поля 
@@ -118,7 +104,6 @@ namespace NoteApp
             }
         }
 
-
         /// <summary>
         /// Свойство назнавия заметки.
         /// </summary>
@@ -166,6 +151,14 @@ namespace NoteApp
         {
             get { return _timeLastEdit; }
             set { _timeLastEdit = DateTime.Now; }
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+            //Note note = new Note();
+            //note.Category = this.Category;
+            //return note;
         }
 
         #endregion
