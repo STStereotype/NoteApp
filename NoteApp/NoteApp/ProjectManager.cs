@@ -29,7 +29,7 @@ namespace NoteApp
         /// <summary>
         /// Метод сохранения данных в файл с расширением json
         /// </summary>
-        public static void SaveData(List<Note> notes, string nameFile)
+        public static void SaveData(Project project, string nameFile)
         {
             JsonSerializer serializer = new JsonSerializer();
 
@@ -39,26 +39,26 @@ namespace NoteApp
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
                     //Вызываем сериализацию и передаем объект, который хотим сериализовать
-                    serializer.Serialize(writer, notes);
+                    serializer.Serialize(writer, project);
                 }
         }
 
         /// <summary>
         /// Метод загрузки данных из файла с расширением json
         /// </summary>
-        public static List<Note> LoadData(string nameFile)
+        public static Project LoadData(string nameFile)
         {
-            List<Note> notes = null;
+            Project project;
             //Создаём экземпляр сериализатора
             JsonSerializer serializer = new JsonSerializer();
             //Открываем поток для чтения из файла с указанием пути
                 using (StreamReader sr = new StreamReader(nameFile))
                 using (JsonReader reader = new JsonTextReader(sr))
                 {
-                    //Вызываем десериализацию и явно преобразуем результат в целевой тип данных
-                    notes = serializer.Deserialize<List<Note>>(reader);
+                //Вызываем десериализацию и явно преобразуем результат в целевой тип данных
+                project = serializer.Deserialize<Project>(reader);
                 }
-            return notes;
+            return project;
         }
     }
 }

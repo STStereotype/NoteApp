@@ -16,11 +16,19 @@ namespace NoteAppUI
         public MainForm()
         {
             InitializeComponent();
+            textCurrentNote.ReadOnly = true;
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Project project = new Project();
+            ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+            textCurrentNote.Text = ProjectManager.DefaultFilename;
+        }
 
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
         }
     }
 }
