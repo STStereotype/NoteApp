@@ -17,11 +17,11 @@ namespace NoteApp
         /// <summary>
         /// Категория заметки.
         /// </summary>
-        private category _category;
+        private Category _category;
         /// <summary>
         /// Название заметки.
         /// </summary>
-        private string _name = "";
+        private string _name = "Без названия";
         /// <summary>
         /// Текст заметки.
         /// </summary>
@@ -54,46 +54,46 @@ namespace NoteApp
         /// <summary>
         /// Свойство категории заметки.
         /// </summary>
-        public category Category
+        public Category Category
         {
             get { return _category; }
             set
             {
                 switch (value)
                 {
-                    case category.Work:
+                    case Category.Work:
                         {
-                            _category = category.Work;
+                            _category = Category.Work;
                             break;
                         }
-                    case category.Home:
+                    case Category.Home:
                         {
-                            _category = category.Home;
+                            _category = Category.Home;
                             break;
                         }
-                    case category.HealthAndSports:
+                    case Category.HealthAndSports:
                         {
-                            _category = category.HealthAndSports;
+                            _category = Category.HealthAndSports;
                             break;
                         }
-                    case category.People:
+                    case Category.People:
                         {
-                            _category = category.People;
+                            _category = Category.People;
                             break;
                         }
-                    case category.Documents:
+                    case Category.Documents:
                         {
-                            _category = category.Documents;
+                            _category = Category.Documents;
                             break;
                         }
-                    case category.Finance:
+                    case Category.Finance:
                         {
-                            _category = category.Finance;
+                            _category = Category.Finance;
                             break;
                         }
-                    case category.Different:
+                    case Category.Different:
                         {
-                            _category = category.Different;
+                            _category = Category.Different;
                             break;
                         }
                     default:
@@ -112,13 +112,13 @@ namespace NoteApp
             get { return _name; }
             set
             {
-                if(value.Length < 0)
+                if(value.Length == 0)
                 {
                     throw new ArgumentException("Название заметки не может быть пустым");
                 }
-                else if (value.Length < 0)
+                else if (value.Length > 50)
                 {
-                    throw new ArgumentException("Колличество символов в заметке не может привышать 50");
+                    throw new ArgumentException("Количество символов в названии заметкм не может превышать 50");
                 }
                 else
                 {
@@ -153,12 +153,13 @@ namespace NoteApp
             set { _timeLastEdit = DateTime.Now; }
         }
 
+        /// <summary>
+        /// Метод интерфейса ICloneable, создание копии заметки
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return MemberwiseClone();
-            //Note note = new Note();
-            //note.Category = this.Category;
-            //return note;
         }
 
         #endregion

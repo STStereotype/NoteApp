@@ -16,14 +16,14 @@ namespace NoteApp
         /// <summary>
         /// Путь к сохраняему файлу.
         /// </summary>
-        private static string _pathFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "NoteApp.json";
+        private static string _pathFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\NoteApp\\NoteApp.json";
 
-        public static string DefaultFilename 
-        { 
+        public static string DefaultFilename
+        {
             get
             {
                 return _pathFile;
-            } 
+            }
         }
 
         /// <summary>
@@ -31,17 +31,19 @@ namespace NoteApp
         /// </summary>
         public static void SaveData(Project project, string nameFile)
         {
+            CreatedDirectory();
             JsonSerializer serializer = new JsonSerializer();
 
             //Открываем поток для записи в файл с указанием пути
-                using (StreamWriter sw = new StreamWriter(nameFile))
-                //environment.getfolderpath
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    //Вызываем сериализацию и передаем объект, который хотим сериализовать
-                    serializer.Serialize(writer, project);
-                }
+            using (StreamWriter sw = new StreamWriter(nameFile))
+            //environment.getfolderpath
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                //Вызываем сериализацию и передаем объект, который хотим сериализовать
+                serializer.Serialize(writer, project);
+            }
         }
+
 
         /// <summary>
         /// Метод загрузки данных из файла с расширением json
@@ -52,13 +54,20 @@ namespace NoteApp
             //Создаём экземпляр сериализатора
             JsonSerializer serializer = new JsonSerializer();
             //Открываем поток для чтения из файла с указанием пути
-                using (StreamReader sr = new StreamReader(nameFile))
-                using (JsonReader reader = new JsonTextReader(sr))
-                {
+            using (StreamReader sr = new StreamReader(nameFile))
+            using (JsonReader reader = new JsonTextReader(sr))
+            {
                 //Вызываем десериализацию и явно преобразуем результат в целевой тип данных
                 project = serializer.Deserialize<Project>(reader);
-                }
+            }
             return project;
+        }
+
+        private static void CreatedDirectory()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\NoteApp";
+            if (!System.IO.Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
     }
 }
