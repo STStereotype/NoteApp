@@ -300,9 +300,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.ColumnCount = 3;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.31058F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.31058F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.37884F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Controls.Add(this.ImageAddNote, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.ImageEditNote, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.ImageRemoveNote, 2, 0);
@@ -328,7 +328,7 @@
             // 
             this.ImageEditNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ImageEditNote.Image = ((System.Drawing.Image)(resources.GetObject("ImageEditNote.Image")));
-            this.ImageEditNote.Location = new System.Drawing.Point(57, 40);
+            this.ImageEditNote.Location = new System.Drawing.Point(58, 40);
             this.ImageEditNote.Name = "ImageEditNote";
             this.ImageEditNote.Size = new System.Drawing.Size(32, 30);
             this.ImageEditNote.TabIndex = 7;
@@ -339,7 +339,7 @@
             // 
             this.ImageRemoveNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ImageRemoveNote.Image = ((System.Drawing.Image)(resources.GetObject("ImageRemoveNote.Image")));
-            this.ImageRemoveNote.Location = new System.Drawing.Point(111, 40);
+            this.ImageRemoveNote.Location = new System.Drawing.Point(113, 40);
             this.ImageRemoveNote.Name = "ImageRemoveNote";
             this.ImageRemoveNote.Size = new System.Drawing.Size(32, 30);
             this.ImageRemoveNote.TabIndex = 6;
@@ -458,7 +458,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "  NoteApp";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NoteAppUI
 {
-    public enum AddOrEdit
+    public enum NoteMode
     {
         Add,
         Edit

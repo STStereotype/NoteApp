@@ -21,7 +21,7 @@ namespace NoteApp
         /// <summary>
         /// Название заметки.
         /// </summary>
-        private string _name = "Без названия";
+        private string _name = "Untitled";
         /// <summary>
         /// Текст заметки.
         /// </summary>
@@ -40,7 +40,7 @@ namespace NoteApp
         #region Конструкторы класса
 
         /// <summary>
-        /// Конструктор класса Note.
+        /// Создает экземпляр Note.
         /// </summary>
         public Note()
         {
@@ -52,7 +52,7 @@ namespace NoteApp
         #region Свойства 
 
         /// <summary>
-        /// Свойство категории заметки.
+        /// Возвращает и щадает категорию заметок.
         /// </summary>
         public Category Category
         {
@@ -96,16 +96,13 @@ namespace NoteApp
                             _category = Category.Different;
                             break;
                         }
-                    default:
-
-                        break;
                 }
 
             }
         }
 
         /// <summary>
-        /// Свойство назнавия заметки.
+        /// Возвращает и задает название заметки.
         /// </summary>
         public string Name
         {
@@ -114,11 +111,11 @@ namespace NoteApp
             {
                 if(value.Length == 0)
                 {
-                    throw new ArgumentException("Название заметки не может быть пустым");
+                    throw new ArgumentException("Note name cannot be empty");
                 }
-                else if (value.Length > 50)
+                if (value.Length > 50)
                 {
-                    throw new ArgumentException("Количество символов в названии заметкм не может превышать 50");
+                    throw new ArgumentException("The number of characters in the title of the note cannot exceed 50");
                 }
                 else
                 {
@@ -128,7 +125,7 @@ namespace NoteApp
         }
 
         /// <summary>
-        /// Свойство текста заметки
+        /// Возвращает и задает текст заметки.
         /// </summary>
         public string TextNote
         {
@@ -137,7 +134,7 @@ namespace NoteApp
         }
 
         /// <summary>
-        /// Свойство даты создания заметки.
+        /// Возвращает дату создани заметки.
         /// </summary>
         public DateTime DateCreation
         {
@@ -145,7 +142,7 @@ namespace NoteApp
         }
 
         /// <summary>
-        /// Свойство даты последнего редактирования заметки.
+        /// Возвращает и задает дату изменения заметки
         /// </summary>
         public DateTime TimeLastEdit
         {

@@ -23,7 +23,7 @@ namespace NoteApp
 
 
         /// <summary>
-        /// Своство заметок.
+        /// Возвращает и задает список заметок.
         /// </summary>
         public List<Note> Notes
         {

@@ -11,8 +11,14 @@ using System.Windows.Forms;
 
 namespace NoteAppUI
 {
+    /// <summary>
+    /// Класс формы About.
+    /// </summary>
     public partial class About : Form
     {
+        /// <summary>
+        /// Создает экземпляр About.
+        /// </summary>
         public About()
         {
             InitializeComponent();

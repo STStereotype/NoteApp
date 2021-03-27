@@ -12,15 +12,15 @@ using NoteApp;
 namespace NoteAppUI
 {
     /// <summary>
-    /// Форма работы с заметками: Редактирование и добавление заметок.
+    /// Класс формы работы с заметками: Редактирование и добавление заметок.
     /// </summary>
-    public partial class AddEditNote : Form
+    public partial class NoteForm : Form
     {
         #region Переменные
         /// <summary>
         /// Переменная enum добавление и редактирования заметки.
         /// </summary>
-        private AddOrEdit _addOrEdit;
+        private NoteMode _addOrEdit;
         /// <summary>
         /// переменная списка заметок.
         /// </summary>
@@ -37,25 +37,25 @@ namespace NoteAppUI
         #endregion
 
         /// <summary>
-        /// Конструктор для добавления новой заметки.
+        /// Создает экземпляр AddEditNote добавления новой заметки.
         /// </summary>
         /// <param name="project">Прокет, в котором хранятся заметки.</param>
-        public AddEditNote(Project project)
+        public NoteForm(Project project)
         {
             InitializeComponent();
             InitializationComboBox();
             _project = project;
             _tempNote = new Note();
-            _addOrEdit = AddOrEdit.Add;
+            _addOrEdit = NoteMode.Add;
             textBoxNameNote.Text = _tempNote.Name;
         }
 
         /// <summary>
-        /// Конструктор для редактирования заметки.
+        /// Создает экземпляр AddEditNote редактирование заметки.
         /// </summary>
         /// <param name="notes">Список заметок, в которой будет изменена заметка.</param>
         /// <param name="indexNote">Индект редактируемой заметки.</param>
-        public AddEditNote(Project project, int indexNote)
+        public NoteForm(Project project, int indexNote)
         {
             InitializeComponent();
             InitializationComboBox();
@@ -66,14 +66,9 @@ namespace NoteAppUI
             textBoxNameNote.Text = _tempNote.Name;
             comboBoxCategory.SelectedIndex = (int)_tempNote.Category;
             textBoxTextNote.Text = _tempNote.TextNote;
-            _addOrEdit = AddOrEdit.Edit;
+            _addOrEdit = NoteMode.Edit;
         }
 
-        /// <summary>
-        /// Текстовое поле, работа с названием заметки.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void textBoxNameNote_TextChanged(object sender, EventArgs e)
         {
             try
@@ -82,28 +77,20 @@ namespace NoteAppUI
                 _tempNote.Name = textBoxNameNote.Text;
 
             }
-            catch (Exception exeption)
+            catch 
             {
                 textBoxNameNote.BackColor = Color.FromArgb(0xFF, 0x55, 0x55);
-                //MessageBox.Show(exeption.Message, "Input error",
-                //                MessageBoxButtons.OKCancel,
-                //                MessageBoxIcon.Information);
             }
         }
 
-        /// <summary>
-        /// Кнопка OK, применение изменений.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void buttonOK_Click(object sender, EventArgs e)
         {
             try
             {
                 _tempNote.Name = textBoxNameNote.Text;
-                if (_addOrEdit == AddOrEdit.Add)
+                if (_addOrEdit == NoteMode.Add)
                     _project.Notes.Add(_tempNote);
-                else if (_addOrEdit == AddOrEdit.Edit)
+                else if (_addOrEdit == NoteMode.Edit)
                     _project.Notes[_indexEditNote] = _tempNote;
                 ProjectManager.SaveData(_project, ProjectManager.DefaultFilename);
                 Close();
@@ -131,36 +118,26 @@ namespace NoteAppUI
             comboBoxCategory.SelectedIndex = 0;
         }
 
-        /// <summary>
-        /// Текстовое поле, для работы в текстом заметки.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void textBoxTextNote_TextChanged(object sender, EventArgs e)
         {
             if (_tempNote != null)
                 _tempNote.TextNote = textBoxTextNote.Text;
         }
 
-        /// <summary>
-        /// Кнопка Cancle, для выхода из формы AddEditNote без сохранениея изменений
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void buttonCancle_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-       /// <summary>
-       /// Событие ComboBoxCategory, ввод желаемой из существующий категорий
-       /// </summary>
-       /// <param name="sender"></param>
-       /// <param name="e"></param>
         private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(_tempNote != null)
                 _tempNote.Category = (Category)comboBoxCategory.SelectedItem;
+        }
+
+        private void AddEditNote_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

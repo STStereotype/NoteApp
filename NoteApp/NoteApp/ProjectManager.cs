@@ -50,17 +50,32 @@ namespace NoteApp
         /// </summary>
         public static Project LoadData(string nameFile)
         {
-            Project project;
-            //Создаём экземпляр сериализатора
-            JsonSerializer serializer = new JsonSerializer();
-            //Открываем поток для чтения из файла с указанием пути
-            using (StreamReader sr = new StreamReader(nameFile))
-            using (JsonReader reader = new JsonTextReader(sr))
+            try
             {
-                //Вызываем десериализацию и явно преобразуем результат в целевой тип данных
-                project = serializer.Deserialize<Project>(reader);
+                Project project;
+                //Создаём экземпляр сериализатора
+                JsonSerializer serializer = new JsonSerializer();
+                //Открываем поток для чтения из файла с указанием пути
+                using (StreamReader sr = new StreamReader(nameFile))
+                using (JsonReader reader = new JsonTextReader(sr))
+                {
+                    //Вызываем десериализацию и явно преобразуем результат в целевой тип данных
+                    project = serializer.Deserialize<Project>(reader);
+                }
+                return project;
             }
-            return project;
+            catch (DirectoryNotFoundException ex)
+            {
+                throw new DirectoryNotFoundException("Invalid file path", ex);
+            }
+            catch(FileNotFoundException ex)
+            {
+                throw new FileNotFoundException("File not found", ex);
+            }
+            catch(JsonReaderException ex)
+            {
+                throw new JsonReaderException("The file is corrupted", ex);
+            }
         }
 
         private static void CreatedDirectory()

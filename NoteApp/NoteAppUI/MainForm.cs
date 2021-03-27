@@ -11,14 +11,29 @@ using NoteApp;
 
 namespace NoteAppUI
 {
+    /// <summary>
+    /// Класс главной формы программы.
+    /// </summary>
     public partial class MainForm : Form
     {
+        private int _heightForm;
+        private int _widthForm;
+        /// <summary>
+        /// Проект, в котором хранятся данные о заметках.
+        /// </summary>
         private Project project;
-        int DuplicateNoteNumber = 0;
+        /// <summary>
+        /// Переменная, для посчета, сколько заметок в категории,
+        /// с одинакомыми названиями.
+        /// </summary>
+        private int DuplicateNoteNumber = 0;
+        /// <summary>
+        /// Создает экземпляр MainForm.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
-
+            MinimumSize = new System.Drawing.Size(this.Width, this.Height);
             comboBoxCategory.Items.Add(Category.Work);
             comboBoxCategory.Items.Add(Category.Home);
             comboBoxCategory.Items.Add(Category.HealthAndSports);
@@ -27,27 +42,23 @@ namespace NoteAppUI
             comboBoxCategory.Items.Add(Category.Finance);
             comboBoxCategory.Items.Add(Category.Different);
             comboBoxCategory.SelectedIndex = 0;
-            try
-            {
+            //try
+            //{
                 project = ProjectManager.LoadData(ProjectManager.DefaultFilename);
                 if (project == null)
                 {
                     project = new Project();
                     project.Notes = new List<Note>();
                 }
-            }
-            catch
-            {
-                project = new Project();
-                project.Notes = new List<Note>();
-            }
+            //}
+            //catch
+            //{
+            //    project = new Project();
+            //    project.Notes = new List<Note>();
+            //}
 
             timer1.Start();
             FillingListBox();
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
         }
 
         #region Add Note
@@ -64,9 +75,15 @@ namespace NoteAppUI
 
         #region Методы добавления заметок
 
+        /// <summary>
+        /// Метод создания новой формы AddEditeNote,
+        /// для добавления новой заметки.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddNote()
         {
-            LoadingForm(new AddEditNote(project), FormStartPosition.CenterParent);
+            LoadingForm(new NoteForm(project), FormStartPosition.CenterParent);
             FillingListBox();
         }
 
@@ -88,6 +105,12 @@ namespace NoteAppUI
 
         #region методы редактирования заметок
 
+        /// <summary>
+        /// Метод создания новой формы AddEditeNote,
+        /// для редактирования заметки.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditNote()
         {
             if (listBoxNote.SelectedItem != null)
@@ -96,7 +119,7 @@ namespace NoteAppUI
                 {
                     if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber == j
                         && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                        LoadingForm(new AddEditNote(project, i), FormStartPosition.CenterParent);
+                        LoadingForm(new NoteForm(project, i), FormStartPosition.CenterParent);
                     if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber + 1 != j
                         && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
                         j++;
@@ -127,6 +150,11 @@ namespace NoteAppUI
 
         #region Методы удаления заметок
 
+        /// <summary>
+        /// Метод удаления заметки,
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveNote()
         {
             if (listBoxNote.SelectedItem != null)
@@ -177,6 +205,12 @@ namespace NoteAppUI
             form.ShowDialog(this);
         }
 
+
+        /// <summary>
+        /// Метод замолнения ListBox заметками,
+        /// которые относятся к текущей категории в
+        /// comboBoxCategory
+        /// </summary>
         private void FillingListBox()
         {
             if (project != null)
@@ -193,6 +227,19 @@ namespace NoteAppUI
             }
         }
 
+        private void ExitProgram()
+        {
+            DialogResult result = MessageBox.Show("Do you really want to finish the job?",
+                          "Message",
+                          MessageBoxButtons.OKCancel,
+                          MessageBoxIcon.Question); ;
+            if (result == DialogResult.OK)
+            {
+                ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                components.Dispose();
+                base.Dispose(true);
+            }
+        }
         #endregion
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -251,14 +298,7 @@ namespace NoteAppUI
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you really want to finish the job?",
-                                                  "Message",
-                                                  MessageBoxButtons.OKCancel,
-                                                  MessageBoxIcon.Question); ;
-            if (result == DialogResult.OK)
-            {
-                Close();
-            }
+            ExitProgram();
         }
 
         private void listBoxNote_KeyDown(object sender, KeyEventArgs e)
@@ -271,16 +311,7 @@ namespace NoteAppUI
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you really want to finish the job?",
-                                      "Message",
-                                      MessageBoxButtons.OKCancel,
-                                      MessageBoxIcon.Question); ;
-            if (result == DialogResult.OK)
-            {
-                ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
-                components.Dispose();
-                base.Dispose(true);
-            }
+            ExitProgram();
         }
 
         private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
