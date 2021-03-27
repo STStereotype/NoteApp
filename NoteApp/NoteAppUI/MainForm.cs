@@ -42,22 +42,22 @@ namespace NoteAppUI
             comboBoxCategory.Items.Add(Category.Finance);
             comboBoxCategory.Items.Add(Category.Different);
             comboBoxCategory.SelectedIndex = 0;
-            //try
-            //{
+            try
+            {
                 project = ProjectManager.LoadData(ProjectManager.DefaultFilename);
                 if (project == null)
                 {
                     project = new Project();
                     project.Notes = new List<Note>();
                 }
-            //}
-            //catch
-            //{
-            //    project = new Project();
-            //    project.Notes = new List<Note>();
-            //}
+            }
+            catch
+            {
+                project = new Project();
+                project.Notes = new List<Note>();
+            }
 
-            timer1.Start();
+    timer1.Start();
             FillingListBox();
         }
 
@@ -227,19 +227,6 @@ namespace NoteAppUI
             }
         }
 
-        private void ExitProgram()
-        {
-            DialogResult result = MessageBox.Show("Do you really want to finish the job?",
-                          "Message",
-                          MessageBoxButtons.OKCancel,
-                          MessageBoxIcon.Question); ;
-            if (result == DialogResult.OK)
-            {
-                ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
-                components.Dispose();
-                base.Dispose(true);
-            }
-        }
         #endregion
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -298,7 +285,6 @@ namespace NoteAppUI
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ExitProgram();
         }
 
         private void listBoxNote_KeyDown(object sender, KeyEventArgs e)
@@ -311,7 +297,6 @@ namespace NoteAppUI
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ExitProgram();
         }
 
         private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
