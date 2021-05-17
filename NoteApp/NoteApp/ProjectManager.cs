@@ -50,9 +50,9 @@ namespace NoteApp
         /// </summary>
         public static Project LoadData(string nameFile)
         {
+            Project project;
             try
             {
-                Project project;
                 //Создаём экземпляр сериализатора
                 JsonSerializer serializer = new JsonSerializer();
                 //Открываем поток для чтения из файла с указанием пути
@@ -64,17 +64,11 @@ namespace NoteApp
                 }
                 return project;
             }
-            catch (DirectoryNotFoundException ex)
+            catch
             {
-                throw new DirectoryNotFoundException("Invalid file path", ex);
-            }
-            catch(FileNotFoundException ex)
-            {
-                throw new FileNotFoundException("File not found", ex);
-            }
-            catch(JsonReaderException ex)
-            {
-                throw new JsonReaderException("The file is corrupted", ex);
+                project = new Project();
+                project.Notes = new List<Note>();
+                return project;
             }
         }
 

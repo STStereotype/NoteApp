@@ -29,7 +29,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +60,6 @@
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.labelNameCurrentCategory = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -86,9 +84,8 @@
             // exitToolStripMenuItem1
             // 
             this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            this.exitToolStripMenuItem1.Size = new System.Drawing.Size(116, 26);
+            this.exitToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
             this.exitToolStripMenuItem1.Text = "Exit";
-            this.exitToolStripMenuItem1.Click += new System.EventHandler(this.exitToolStripMenuItem1_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -147,7 +144,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.menuStrip1.Size = new System.Drawing.Size(160, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(310, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -160,6 +157,7 @@
             this.textCurrentNote.Multiline = true;
             this.textCurrentNote.Name = "textCurrentNote";
             this.textCurrentNote.ReadOnly = true;
+            this.textCurrentNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textCurrentNote.Size = new System.Drawing.Size(703, 637);
             this.textCurrentNote.TabIndex = 4;
             // 
@@ -352,10 +350,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxNote.FormattingEnabled = true;
+            this.listBoxNote.IntegralHeight = false;
             this.listBoxNote.ItemHeight = 16;
             this.listBoxNote.Location = new System.Drawing.Point(3, 50);
             this.listBoxNote.Name = "listBoxNote";
-            this.listBoxNote.Size = new System.Drawing.Size(407, 644);
+            this.listBoxNote.Size = new System.Drawing.Size(407, 652);
             this.listBoxNote.TabIndex = 2;
             this.listBoxNote.SelectedIndexChanged += new System.EventHandler(this.listBoxNote_SelectedIndexChanged);
             this.listBoxNote.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxNote_KeyDown);
@@ -439,10 +438,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Category:";
             // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -457,7 +452,6 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "  NoteApp";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -510,7 +504,6 @@
         private System.Windows.Forms.PictureBox ImageAddNote;
         private System.Windows.Forms.PictureBox ImageEditNote;
         private System.Windows.Forms.PictureBox ImageRemoveNote;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.DateTimePicker dateCreation;
     }
 }

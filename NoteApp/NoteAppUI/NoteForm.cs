@@ -16,66 +16,48 @@ namespace NoteAppUI
     /// </summary>
     public partial class NoteForm : Form
     {
-        #region Переменные
         /// <summary>
-        /// Переменная enum добавление и редактирования заметки.
+        /// Редактируемая заметка.
         /// </summary>
-        private NoteMode _addOrEdit;
+        private Note _note;
+
         /// <summary>
-        /// переменная списка заметок.
-        /// </summary>
-        private Project _project;
-        /// <summary>
-        /// Переменная одной заметки.
+        /// Клон редактируемой заметки.
         /// </summary>
         private Note _tempNote;
-        /// <summary>
-        /// Переменная индекса редактируемой заметки.
-        /// </summary>
-        private int _indexEditNote;
-
-        #endregion
 
         /// <summary>
         /// Создает экземпляр AddEditNote добавления новой заметки.
         /// </summary>
         /// <param name="project">Прокет, в котором хранятся заметки.</param>
-        public NoteForm(Project project)
+        public NoteForm(Note note)
         {
             InitializeComponent();
             InitializationComboBox();
-            _project = project;
-            _tempNote = new Note();
-            _addOrEdit = NoteMode.Add;
+            _note = note;
+            _tempNote = (Note)_note.Clone();
+            comboBoxCategory.SelectedIndex = (int)_tempNote.Category;
             textBoxNameNote.Text = _tempNote.Name;
+            textBoxTextNote.Text = _tempNote.TextNote;
         }
 
         /// <summary>
-        /// Создает экземпляр AddEditNote редактирование заметки.
+        /// Метод заполнение ComboBoxCategory.
         /// </summary>
-        /// <param name="notes">Список заметок, в которой будет изменена заметка.</param>
-        /// <param name="indexNote">Индект редактируемой заметки.</param>
-        public NoteForm(Project project, int indexNote)
+        private void InitializationComboBox()
         {
-            InitializeComponent();
-            InitializationComboBox();
-            _indexEditNote = indexNote;
-            _project = project;
-            _project.Notes = project.Notes;
-            _tempNote = (Note)_project.Notes[_indexEditNote].Clone();
-            textBoxNameNote.Text = _tempNote.Name;
-            comboBoxCategory.SelectedIndex = (int)_tempNote.Category;
-            textBoxTextNote.Text = _tempNote.TextNote;
-            _addOrEdit = NoteMode.Edit;
+            var valuesAsList = Enum.GetValues(typeof(Category)).Cast<Category>().ToList();
+            foreach (var obj in valuesAsList)
+                comboBoxCategory.Items.Add(obj);
+            comboBoxCategory.SelectedIndex = 0;
         }
 
         private void textBoxNameNote_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                textBoxNameNote.BackColor = Color.LightGreen;
+                textBoxNameNote.BackColor = Color.White;
                 _tempNote.Name = textBoxNameNote.Text;
-
             }
             catch 
             {
@@ -87,12 +69,10 @@ namespace NoteAppUI
         {
             try
             {
-                _tempNote.Name = textBoxNameNote.Text;
-                if (_addOrEdit == NoteMode.Add)
-                    _project.Notes.Add(_tempNote);
-                else if (_addOrEdit == NoteMode.Edit)
-                    _project.Notes[_indexEditNote] = _tempNote;
-                ProjectManager.SaveData(_project, ProjectManager.DefaultFilename);
+                _note.Name = _tempNote.Name;
+                _note.TextNote = _tempNote.TextNote;
+                _note.Category = _tempNote.Category;
+                _note.TimeLastEdit = DateTime.Now;
                 Close();
             }
             catch (Exception exeption)
@@ -101,21 +81,6 @@ namespace NoteAppUI
                                 MessageBoxButtons.OKCancel,
                                 MessageBoxIcon.Information);
             }
-        }
-
-        /// <summary>
-        /// Метод заполнение ComboBoxCategory.
-        /// </summary>
-        private void InitializationComboBox()
-        {
-            comboBoxCategory.Items.Add(Category.Work);
-            comboBoxCategory.Items.Add(Category.Home);
-            comboBoxCategory.Items.Add(Category.HealthAndSports);
-            comboBoxCategory.Items.Add(Category.People);
-            comboBoxCategory.Items.Add(Category.Documents);
-            comboBoxCategory.Items.Add(Category.Finance);
-            comboBoxCategory.Items.Add(Category.Different);
-            comboBoxCategory.SelectedIndex = 0;
         }
 
         private void textBoxTextNote_TextChanged(object sender, EventArgs e)
@@ -133,11 +98,6 @@ namespace NoteAppUI
         {
             if(_tempNote != null)
                 _tempNote.Category = (Category)comboBoxCategory.SelectedItem;
-        }
-
-        private void AddEditNote_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

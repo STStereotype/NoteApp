@@ -11,9 +11,6 @@ namespace NoteApp
     /// </summary>
     public class Note : ICloneable
     {
-
-        #region Поля 
-
         /// <summary>
         /// Категория заметки.
         /// </summary>
@@ -35,10 +32,6 @@ namespace NoteApp
         /// </summary>
         private DateTime _timeLastEdit;
 
-        #endregion
-
-        #region Конструкторы класса
-
         /// <summary>
         /// Создает экземпляр Note.
         /// </summary>
@@ -46,10 +39,6 @@ namespace NoteApp
         {
             _timeLastEdit = _dateCreation = DateTime.Now;
         }
-
-        #endregion
-
-        #region Свойства 
 
         /// <summary>
         /// Возвращает и щадает категорию заметок.
@@ -59,45 +48,7 @@ namespace NoteApp
             get { return _category; }
             set
             {
-                switch (value)
-                {
-                    case Category.Work:
-                        {
-                            _category = Category.Work;
-                            break;
-                        }
-                    case Category.Home:
-                        {
-                            _category = Category.Home;
-                            break;
-                        }
-                    case Category.HealthAndSports:
-                        {
-                            _category = Category.HealthAndSports;
-                            break;
-                        }
-                    case Category.People:
-                        {
-                            _category = Category.People;
-                            break;
-                        }
-                    case Category.Documents:
-                        {
-                            _category = Category.Documents;
-                            break;
-                        }
-                    case Category.Finance:
-                        {
-                            _category = Category.Finance;
-                            break;
-                        }
-                    case Category.Different:
-                        {
-                            _category = Category.Different;
-                            break;
-                        }
-                }
-
+                _category = (Category)Enum.GetValues(typeof(Category)).GetValue((int)value);
             }
         }
 
@@ -158,8 +109,5 @@ namespace NoteApp
         {
             return MemberwiseClone();
         }
-
-        #endregion
-
     }
 }
