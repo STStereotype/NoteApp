@@ -36,6 +36,7 @@ namespace NoteAppUI
             InitializationComboBox();
             _note = note;
             _tempNote = (Note)_note.Clone();
+            _tempNote.TimeLastEdit = DateTime.Now;
             comboBoxCategory.SelectedIndex = (int)_tempNote.Category;
             textBoxNameNote.Text = _tempNote.Name;
             textBoxTextNote.Text = _tempNote.TextNote;
@@ -46,9 +47,8 @@ namespace NoteAppUI
         /// </summary>
         private void InitializationComboBox()
         {
-            var valuesAsList = Enum.GetValues(typeof(Category)).Cast<Category>().ToList();
-            foreach (var obj in valuesAsList)
-                comboBoxCategory.Items.Add(obj);
+            var valuesAsList = Enum.GetValues(typeof(Category)).Cast<Object>().ToArray();
+            comboBoxCategory.Items.AddRange(valuesAsList);
             comboBoxCategory.SelectedIndex = 0;
         }
 
@@ -72,7 +72,6 @@ namespace NoteAppUI
                 _note.Name = _tempNote.Name;
                 _note.TextNote = _tempNote.TextNote;
                 _note.Category = _tempNote.Category;
-                _note.TimeLastEdit = DateTime.Now;
                 Close();
             }
             catch (Exception exeption)

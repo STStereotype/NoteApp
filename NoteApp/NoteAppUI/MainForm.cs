@@ -24,7 +24,7 @@ namespace NoteAppUI
         /// <summary>
         /// Заметки, которые в данный момент находятся в listBoxNote.
         /// </summary>
-        private List<Note> _notes;
+        private List<Note> _currentNotes;
 
         /// <summary>
         /// Создает экземпляр MainForm.
@@ -42,10 +42,9 @@ namespace NoteAppUI
         /// </summary>
         private void InitializationComboBox()
         {
-            var valuesAsList = Enum.GetValues(typeof(Category)).Cast<Category>().ToList();
+            var valuesAsList = Enum.GetValues(typeof(Category)).Cast<Object>().ToArray();
             comboBoxCategory.Items.Add("All");
-            foreach (var obj in valuesAsList)
-                comboBoxCategory.Items.Add(obj);
+            comboBoxCategory.Items.AddRange(valuesAsList);
             comboBoxCategory.SelectedIndex = 0;
         }
 
@@ -66,9 +65,9 @@ namespace NoteAppUI
                 if (result == DialogResult.OK)
                 {
                     foreach (var note in _project.Notes)
-                        if (_notes[listBoxNote.SelectedIndex] == note)
+                        if (_currentNotes[listBoxNote.SelectedIndex] == note)
                         {
-                            _notes.RemoveAt(listBoxNote.SelectedIndex);
+                            _currentNotes.RemoveAt(listBoxNote.SelectedIndex);
                             _project.Notes.Remove(note);
                             break;
                         }
@@ -93,7 +92,7 @@ namespace NoteAppUI
             if (listBoxNote.SelectedItem != null)
             {
                 foreach (var note in _project.Notes)
-                    if (_notes[listBoxNote.SelectedIndex] == note)
+                    if (_currentNotes[listBoxNote.SelectedIndex] == note)
                     {
                         LoadingForm(new NoteForm(note));
                         break;
@@ -140,14 +139,14 @@ namespace NoteAppUI
             {
                 ClearingAllFields();
                 listBoxNote.Items.Clear();
-                _notes = new List<Note>();
+                _currentNotes = new List<Note>();
                 for (int i = 0; i < _project.Notes.Count; i++)
                 {
                     if (comboBoxCategory.SelectedItem.ToString() == "All" || 
                         _project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
                     {
                         listBoxNote.Items.Add(_project.Notes[i].Name);
-                        _notes.Add(_project.Notes[i]);
+                        _currentNotes.Add(_project.Notes[i]);
                     }
                 }
             }
@@ -177,7 +176,7 @@ namespace NoteAppUI
                 {
                     foreach (var note in _project.Notes)
                     {
-                        if (_notes[listBoxNote.SelectedIndex] == note)
+                        if (_currentNotes[listBoxNote.SelectedIndex] == note)
                         {
                             tempNote = note;
                             break;
@@ -192,12 +191,6 @@ namespace NoteAppUI
                 labelNameCurrentCategory.Text = Enum.GetName(typeof(Category), tempNote.Category);
             }
         }
-
-        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillingListBox();
-        }
-
         private void listBoxNote_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -206,40 +199,23 @@ namespace NoteAppUI
             }
         }
 
-        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            LoadingForm(new About());
-        }
+        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e) => FillingListBox();
 
-        private void ImageAddNote_Click(object sender, EventArgs e)
-        {
-            AddNote();
-        }
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e) => LoadingForm(new About());
 
-        private void addNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddNote();
-        }
+        private void ImageAddNote_Click(object sender, EventArgs e) => AddNote();
 
-        private void editNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EditNote();
-        }
+        private void addNoteToolStripMenuItem_Click(object sender, EventArgs e) => AddNote();
 
-        private void ImageEditNote_Click(object sender, EventArgs e)
-        {
-            EditNote();
-        }
+        private void editNoteToolStripMenuItem_Click(object sender, EventArgs e) => EditNote();
 
-        private void ImageRemoveNote_Click(object sender, EventArgs e)
-        {
-            RemoveNote();
-        }
+        private void ImageEditNote_Click(object sender, EventArgs e) => EditNote();
 
-        private void removeNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RemoveNote();
-        }
+        private void ImageRemoveNote_Click(object sender, EventArgs e) => RemoveNote();
+
+
+        private void removeNoteToolStripMenuItem_Click(object sender, EventArgs e) => RemoveNote();
+
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
