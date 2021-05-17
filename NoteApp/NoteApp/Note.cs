@@ -46,10 +46,7 @@ namespace NoteApp
         public Category Category
         {
             get { return _category; }
-            set
-            {
-                _category = (Category)Enum.GetValues(typeof(Category)).GetValue((int)value);
-            }
+            set { _category = (Category)Enum.GetValues(typeof(Category)).GetValue((int)value); }
         }
 
         /// <summary>

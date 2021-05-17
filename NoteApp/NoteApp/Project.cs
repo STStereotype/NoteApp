@@ -12,15 +12,10 @@ namespace NoteApp
     /// </summary>
     public class Project
     {
-        #region Поля
-
         /// <summary>
         /// Список заметок.
         /// </summary>
         private List<Note> _notes;
-
-        #endregion
-
 
         /// <summary>
         /// Возвращает и задает список заметок.

@@ -99,5 +99,10 @@ namespace NoteAppUI
             if(_tempNote != null)
                 _tempNote.Category = (Category)comboBoxCategory.SelectedItem;
         }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
