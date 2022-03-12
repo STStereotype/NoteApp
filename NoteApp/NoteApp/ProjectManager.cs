@@ -7,7 +7,7 @@ namespace NoteApp
     /// <summary>
     /// Менеджер проекта.
     /// </summary>
-    static public class ProjectManager
+    public static class ProjectManager
     {
         /// <summary>
         /// Путь к сохраняему файлу.

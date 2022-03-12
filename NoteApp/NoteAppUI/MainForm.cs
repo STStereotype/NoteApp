@@ -112,16 +112,11 @@ namespace NoteAppUI
                 var result = ShowNewForm(new NoteForm(note), FormStartPosition.CenterParent);
                 if (result == DialogResult.OK)
                 {
-                    for (var i = 0; i < project.Notes.Count; i++)
-                    {
-                        if (project.Notes[i] == _listNotes[listBoxNote.SelectedIndex])
-                        {
-                            project.Notes[i] = note;
-                            ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
-                            UpdateListBox();
-                            i = project.Notes.Count;
-                        }
-                    }
+                    var selectedNote = _listNotes[listBoxNote.SelectedIndex];
+                    var index = project.Notes.IndexOf(selectedNote);
+                    project.Notes[index] = note;
+                    ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                    UpdateListBox();
                 }
             }
             else
@@ -144,16 +139,11 @@ namespace NoteAppUI
                                                         MessageBoxIcon.Question); ;
                 if (result == DialogResult.OK)
                 {
-                    for (var i = 0; i < project.Notes.Count; i++)
-                    {
-                        if (project.Notes[i] == _listNotes[listBoxNote.SelectedIndex])
-                        {
-                            project.Notes.RemoveAt(i);
-                            ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
-                            UpdateListBox();
-                            i = project.Notes.Count;
-                        }
-                    }
+                    var selectedNote = _listNotes[listBoxNote.SelectedIndex];
+                    var index = project.Notes.IndexOf(selectedNote);
+                    project.Notes.RemoveAt(index);
+                    ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                    UpdateListBox();
                 }
             }
             else
