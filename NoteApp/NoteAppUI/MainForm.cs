@@ -9,6 +9,7 @@ namespace NoteAppUI
     {
         private Project project;
         private List<Note> _listNotes = new List<Note>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -21,6 +22,7 @@ namespace NoteAppUI
 
             UpdateListBox();
         }
+
         private void ImageAddNote_Click(object sender, EventArgs e)
         {
             AddNote();
