@@ -161,6 +161,7 @@
             this.textCurrentNote.Multiline = true;
             this.textCurrentNote.Name = "textCurrentNote";
             this.textCurrentNote.ReadOnly = true;
+            this.textCurrentNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textCurrentNote.Size = new System.Drawing.Size(528, 544);
             this.textCurrentNote.TabIndex = 4;
             // 
