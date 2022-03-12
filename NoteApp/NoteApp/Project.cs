@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 
 namespace NoteApp
 {
@@ -12,26 +7,9 @@ namespace NoteApp
     /// </summary>
     public class Project
     {
-        #region Поля
-
-        /// <summary>
-        /// Список заметок.
-        /// </summary>
-        private List<Note> _notes;
-
-        #endregion
-
-
         /// <summary>
         /// Своство заметок.
         /// </summary>
-        public List<Note> Notes
-        {
-            get { return _notes; }
-            set
-            {
-                _notes = value;
-            }
-        }
+        public List<Note> Notes{ get; set; } = new List<Note>();
     }
 }

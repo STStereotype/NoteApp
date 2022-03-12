@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NoteApp
 {
@@ -11,33 +7,30 @@ namespace NoteApp
     /// </summary>
     public class Note : ICloneable
     {
-
-        #region Поля 
-
         /// <summary>
         /// Категория заметки.
         /// </summary>
         private Category _category;
+
         /// <summary>
         /// Название заметки.
         /// </summary>
         private string _name = "Без названия";
+
         /// <summary>
         /// Текст заметки.
         /// </summary>
         private string _textNote = "";
+
         /// <summary>
         /// Дата и время создания заметки
         /// </summary>
         private DateTime _dateCreation;
+
         /// <summary>
         /// Дата и время последнего редактирования
         /// </summary>
         private DateTime _timeLastEdit;
-
-        #endregion
-
-        #region Конструкторы класса
 
         /// <summary>
         /// Конструктор класса Note.
@@ -47,10 +40,6 @@ namespace NoteApp
             _timeLastEdit = _dateCreation = DateTime.Now;
         }
 
-        #endregion
-
-        #region Свойства 
-
         /// <summary>
         /// Свойство категории заметки.
         /// </summary>
@@ -58,50 +47,7 @@ namespace NoteApp
         {
             get { return _category; }
             set
-            {
-                switch (value)
-                {
-                    case Category.Work:
-                        {
-                            _category = Category.Work;
-                            break;
-                        }
-                    case Category.Home:
-                        {
-                            _category = Category.Home;
-                            break;
-                        }
-                    case Category.HealthAndSports:
-                        {
-                            _category = Category.HealthAndSports;
-                            break;
-                        }
-                    case Category.People:
-                        {
-                            _category = Category.People;
-                            break;
-                        }
-                    case Category.Documents:
-                        {
-                            _category = Category.Documents;
-                            break;
-                        }
-                    case Category.Finance:
-                        {
-                            _category = Category.Finance;
-                            break;
-                        }
-                    case Category.Different:
-                        {
-                            _category = Category.Different;
-                            break;
-                        }
-                    default:
-
-                        break;
-                }
-
-            }
+            { _category = value; }
         }
 
         /// <summary>
@@ -161,8 +107,5 @@ namespace NoteApp
         {
             return MemberwiseClone();
         }
-
-        #endregion
-
     }
 }

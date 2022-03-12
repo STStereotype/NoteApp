@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NoteApp;
 
@@ -14,44 +8,19 @@ namespace NoteAppUI
     public partial class MainForm : Form
     {
         private Project project;
-        int DuplicateNoteNumber = 0;
+        private List<Note> _listNotes = new List<Note>();
         public MainForm()
         {
             InitializeComponent();
-
-            comboBoxCategory.Items.Add(Category.Work);
-            comboBoxCategory.Items.Add(Category.Home);
-            comboBoxCategory.Items.Add(Category.HealthAndSports);
-            comboBoxCategory.Items.Add(Category.People);
-            comboBoxCategory.Items.Add(Category.Documents);
-            comboBoxCategory.Items.Add(Category.Finance);
-            comboBoxCategory.Items.Add(Category.Different);
+            foreach (var item in Enum.GetValues(typeof(Category)))
+            {
+                comboBoxCategory.Items.Add(item);
+            }
             comboBoxCategory.SelectedIndex = 0;
-            try
-            {
-                project = ProjectManager.LoadData(ProjectManager.DefaultFilename);
-                if (project == null)
-                {
-                    project = new Project();
-                    project.Notes = new List<Note>();
-                }
-            }
-            catch
-            {
-                project = new Project();
-                project.Notes = new List<Note>();
-            }
+            project = ProjectManager.LoadData(ProjectManager.DefaultFilename);
 
-            timer1.Start();
-            FillingListBox();
+            UpdateListBox();
         }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-        }
-
-        #region Add Note
-
         private void ImageAddNote_Click(object sender, EventArgs e)
         {
             AddNote();
@@ -61,20 +30,6 @@ namespace NoteAppUI
         {
             AddNote();
         }
-
-        #region Методы добавления заметок
-
-        private void AddNote()
-        {
-            LoadingForm(new AddEditNote(project), FormStartPosition.CenterParent);
-            FillingListBox();
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Edit Note
 
         private void editNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -86,22 +41,86 @@ namespace NoteAppUI
             EditNote();
         }
 
-        #region методы редактирования заметок
+        private void ImageRemoveNote_Click(object sender, EventArgs e)
+        {
+            DeleteNote();
+        }
 
+        private void removeNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteNote();
+        }
+
+        private void listBoxNote_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteNote();
+            }
+        }
+
+        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateListBox();
+        }
+
+        private void listBoxNote_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateNoteFields();
+        }
+
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ExitApplication();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ExitApplication();
+        }
+
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ShowNewForm(new AboutForm(), FormStartPosition.CenterScreen);
+        }
+
+        /// <summary>
+        /// Метод добавления заметки.
+        /// </summary>
+        private void AddNote()
+        {
+            var note = new Note();
+            var result = ShowNewForm(new NoteForm(note), FormStartPosition.CenterParent);
+            if (result == DialogResult.OK)
+            {
+                project.Notes.Add(note);
+                ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                UpdateListBox();
+            }
+        }
+
+        /// <summary>
+        /// Метод редактирования заметки.
+        /// </summary>
         private void EditNote()
         {
             if (listBoxNote.SelectedItem != null)
             {
-                for (int i = 0, j = 1; i < project.Notes.Count; i++)
+                var note = (Note)_listNotes[listBoxNote.SelectedIndex].Clone();
+                var result = ShowNewForm(new NoteForm(note), FormStartPosition.CenterParent);
+                if (result == DialogResult.OK)
                 {
-                    if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber == j
-                        && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                        LoadingForm(new AddEditNote(project, i), FormStartPosition.CenterParent);
-                    if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber + 1 != j
-                        && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                        j++;
+                    for (var i = 0; i < project.Notes.Count; i++)
+                    {
+                        if (project.Notes[i] == _listNotes[listBoxNote.SelectedIndex])
+                        {
+                            project.Notes[i] = note;
+                            ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                            UpdateListBox();
+                            i = project.Notes.Count;
+                        }
+                    }
                 }
-                FillingListBox();
             }
             else
             {
@@ -109,25 +128,10 @@ namespace NoteAppUI
             }
         }
 
-        #endregion
-
-        #endregion
-
-        #region Remove Note
-
-        private void ImageRemoveNote_Click(object sender, EventArgs e)
-        {
-            RemoveNote();
-        }
-
-        private void removeNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RemoveNote();
-        }
-
-        #region Методы удаления заметок
-
-        private void RemoveNote()
+        /// <summary>
+        /// Метод удаления заметки.
+        /// </summary>
+        private void DeleteNote()
         {
             if (listBoxNote.SelectedItem != null)
             {
@@ -138,154 +142,94 @@ namespace NoteAppUI
                                                         MessageBoxIcon.Question); ;
                 if (result == DialogResult.OK)
                 {
-                    for (int i = 0, j = 1; i < project.Notes.Count; i++)
+                    for (var i = 0; i < project.Notes.Count; i++)
                     {
-                        if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber == j
-                            && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
+                        if (project.Notes[i] == _listNotes[listBoxNote.SelectedIndex])
                         {
                             project.Notes.RemoveAt(i);
+                            ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
+                            UpdateListBox();
                             i = project.Notes.Count;
                         }
-                        else if (project.Notes[i].Name == listBoxNote.SelectedItem.ToString() && DuplicateNoteNumber + 1 != j
-                            && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                            j++;
                     }
-                    ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
-                    FillingListBox();
                 }
             }
             else
             {
                 MessageBox.Show("Note not selected");
             }
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Методы
+        } 
 
         /// <summary>
         /// Метод загрузки формы.
         /// </summary>
         /// <param name="form">Загрущаемая форма.</param>
         /// <param name="formStartPosition">Положение формы после загрузки.</param>
-        private void LoadingForm(Form form, FormStartPosition formStartPosition)
+        private DialogResult ShowNewForm(Form form, FormStartPosition formStartPosition)
         {
             form.StartPosition = formStartPosition;
             form.ShowDialog(this);
+            return form.DialogResult;
         }
 
-        private void FillingListBox()
+        /// <summary>
+        /// Метод обновления списка заметок.
+        /// </summary>
+        private void UpdateListBox()
         {
             if (project != null)
             {
                 listBoxNote.Items.Clear();
+                _listNotes.Clear();
                 labelNameCurrentCategory.Text = comboBoxCategory.SelectedItem.ToString();
-                for (int i = 0; i < project.Notes.Count; i++)
+                foreach(Note item in project.Notes)
                 {
-                    if (project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
+                    if (item.Category == (Category)comboBoxCategory.SelectedItem)
                     {
-                        listBoxNote.Items.Add(project.Notes[i].Name);
+                        listBoxNote.Items.Add(item.Name);
+                        _listNotes.Add(item);
                     }
                 }
+                UpdateNoteFields();
             }
         }
 
-        #endregion
-
-        private void timer1_Tick(object sender, EventArgs e)
+        /// <summary>
+        /// Метод обновления полей заметки.
+        /// </summary>
+        private void UpdateNoteFields()
         {
-            if (listBoxNote.SelectedItem == null && dateCreation.Visible == true)
+            if (listBoxNote.SelectedItem == null )
             {
-                textCurrentNote.Text = "";
-                labelNameCurrentNote.Text = "";
-                dateCreation.Visible = false;
-                dateModifiend.Visible = false;
+                textCurrentNote.Text = labelNameCurrentNote.Text = "";
+                dateCreation.Visible = dateModifiend.Visible = false;
             }
-        }
-
-        private void listBoxNote_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxNote.SelectedItem != null)
+            else
             {
-                DuplicateNoteNumber = 0;
-                labelNameCurrentNote.Text = listBoxNote.SelectedItem.ToString();
-                dateCreation.Visible = true;
-                dateModifiend.Visible = true;
-                for(int i = 0; i < listBoxNote.Items.Count; i++)
-                {
-                    if(listBoxNote.SelectedItem.ToString() == listBoxNote.Items[i].ToString())
-                    {
-                        DuplicateNoteNumber++;
-                    }
-                    if(i == listBoxNote.SelectedIndex)
-                    {
-                        i = listBoxNote.Items.Count;
-                    }
-                }
-                for (int i = 0, j = 1; i < project.Notes.Count; i++)
-                {
-                    if (j == DuplicateNoteNumber && project.Notes[i].Name == listBoxNote.SelectedItem.ToString() 
-                        && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                    {
-                        dateCreation.Value = project.Notes[i].DateCreation;
-                        dateModifiend.Value = project.Notes[i].TimeLastEdit;
-                        textCurrentNote.Text = project.Notes[i].TextNote;
-                    }
-                    if( j != DuplicateNoteNumber + 1 && project.Notes[i].Name == listBoxNote.SelectedItem.ToString()
-                        && project.Notes[i].Category == (Category)comboBoxCategory.SelectedItem)
-                    {
-                        j++;
-                    }
-
-                }
+                var note =  _listNotes[listBoxNote.SelectedIndex];
+                labelNameCurrentNote.Text = note.Name;
+                dateCreation.Value = note.DateCreation;
+                dateModifiend.Value = note.TimeLastEdit;
+                textCurrentNote.Text = note.TextNote;
+                dateCreation.Visible = dateModifiend.Visible = true;
             }
         }
 
-        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillingListBox();
-        }
-
-        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Метод выхода из приоржения.
+        /// </summary>
+        private void ExitApplication()
         {
             DialogResult result = MessageBox.Show("Do you really want to finish the job?",
-                                                  "Message",
-                                                  MessageBoxButtons.OKCancel,
-                                                  MessageBoxIcon.Question); ;
-            if (result == DialogResult.OK)
-            {
-                Close();
-            }
-        }
-
-        private void listBoxNote_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-            {
-                RemoveNote();
-            }
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Do you really want to finish the job?",
-                                      "Message",
-                                      MessageBoxButtons.OKCancel,
-                                      MessageBoxIcon.Question); ;
+                          "Message",
+                          MessageBoxButtons.OKCancel,
+                          MessageBoxIcon.Question); ;
             if (result == DialogResult.OK)
             {
                 ProjectManager.SaveData(project, ProjectManager.DefaultFilename);
                 components.Dispose();
                 base.Dispose(true);
             }
-        }
-
-        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            LoadingForm(new About(), FormStartPosition.CenterScreen);
         }
     }
 }
